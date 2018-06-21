@@ -1,0 +1,5 @@
+
+( define swap ( lambda ( tuple ) 
+                ( list ( car ( cdr tuple ) ) ( car tuple ) ) 
+              )
+)

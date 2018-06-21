@@ -1,0 +1,8 @@
+Token 'a' Production: S -> Atoms
+Token 'a' Production: Atoms -> Atom Atoms
+Token 'a' Production: Atom -> id[a]
+Token 'b' Production: Atoms -> Atom Atoms
+Token 'b' Production: Atom -> id[b]
+Token 'c' Production: Atoms -> Atom Atoms
+Token 'c' Production: Atom -> id[c]
+Token 'epsilon' Production: Atoms -> epsilon

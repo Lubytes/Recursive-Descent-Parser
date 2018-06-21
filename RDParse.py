@@ -7,11 +7,8 @@ import sys
 
 tokens = []
 count = 0
-for x in sys.argv:
-    if(count == 0):
-        count += 1
-        continue
-    tokens.append(x)
-
+file = sys.argv[1]
+fileContents = open(file, "r")
+tokens = fileContents.read().split()
 print(tokens)
     

@@ -1,0 +1,10 @@
+Token ''' Production: S -> Atoms
+Token ''' Production: Atoms -> Atom Atoms
+Token ''' Production: Atom -> ' Atom
+Token '(' Production: Atom -> List
+Token '(' Production: List -> ( ListBody )
+Token 'a' Production: ListBody -> Atoms
+Token 'a' Production: Atoms -> Atom Atoms
+Token 'a' Production: Atom -> id[a]
+Token 'epsilon' Production: Atoms -> epsilon
+Syntax Error

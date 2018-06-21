@@ -1,0 +1,14 @@
+Token '(' Production: S -> Atoms
+Token '(' Production: Atoms -> Atom Atoms
+Token '(' Production: Atom -> List
+Token '(' Production: List -> ( ListBody )
+Token '(' Production: ListBody -> Atoms
+Token '(' Production: Atoms -> Atom Atoms
+Token '(' Production: Atom -> List
+Token '(' Production: List -> ( ListBody )
+Token 'a' Production: ListBody -> Atoms
+Token 'a' Production: Atoms -> Atom Atoms
+Token 'a' Production: Atom -> id[a]
+Token ')' Production: Atoms -> epsilon
+Token ')' Production: Atoms -> epsilon
+Token 'epsilon' Production: Atoms -> epsilon

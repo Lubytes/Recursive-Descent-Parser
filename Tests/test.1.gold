@@ -1,0 +1,4 @@
+Token 'id' Production: S -> Atoms
+Token 'id' Production: Atoms -> Atom Atoms
+Token 'id' Production: Atom -> id[id]
+Token 'epsilon' Production: Atoms -> epsilon
