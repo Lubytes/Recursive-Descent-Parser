@@ -5,8 +5,6 @@
 
 import sys
 
-tokens = []
-count = 0
 file = sys.argv[1]
 fileContents = open(file, "r")
 tokens = fileContents.read().split()
