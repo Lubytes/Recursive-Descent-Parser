@@ -1,3 +1,1 @@
-Token ')' Production: S -> Atoms
-Token ')' Production: Atoms -> epsilon
 Syntax Error
