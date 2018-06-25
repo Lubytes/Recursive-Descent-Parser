@@ -16,21 +16,37 @@ print(tokens)
 
 #
 def parse_S(tokenList):
+    print ('Production: S -> Atoms')
 
 
 def parse_atoms(tokenList, index):
+    if(tokensList[index]==None or tokensList[index]==")"):
+        print ('Syntax Error')
+        sys.exit()
+    else:
+        print ('Atoms -> Atom Atoms')
 
 
 def parse_atom(tokenList, index):
+    if(tokenList[index]==None or tokenList[index]==")"):
+        print('Syntax Error')
+        sys.exit()
+    else:
+        print('Atom -> List')
 
 
 def parse_list(tokenList, index):
     if(tokenList[index]!='('):
         print("Syntax Error, impossible state")
         sys.exit()
-    print()
+    print('List -> ( ListBody )')
 
 def parse_listBody(tokenList, index):
+     if(tokenList[index]==None or tokenList[index]==")"):
+        print('Syntax Error')
+        sys.exit()
+    else:
+        print('List -> List')
 
 
 def parse_id(tokenList, index):
