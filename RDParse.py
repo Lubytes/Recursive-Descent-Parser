@@ -37,13 +37,13 @@ def parse_atom(stack):
         print("Token /'{0}/' Production: Atom -> int[{0}]").format(stack[-1])
         stack.pop()
 
-
-
 def parse_list(stack):
     if(stack[-1]!='('):
         print("Syntax Error")
         sys.exit()
-    print()
+    print("Token /'{0}/' Production: List -> ( ListBody )").format(stack[-1])
+    stack.pop()
+    parse_listBody(stack)
 
 def parse_listBody(tokenList, index):
 
