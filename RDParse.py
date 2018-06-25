@@ -8,45 +8,50 @@ import sys
 file = sys.argv[1]
 fileContents = open(file, "r")
 tokens = fileContents.read().split()
-print(tokens)
+#print(tokens)
+
+parse_S(tokens)
+
+
+def parse_S(stack):
+    print("Token /'{0}/' Production: S -> Atoms").format(stack[-1])
+    parse_atoms(stack)
 
 
 
-#
-def parse_S(tokenList):
+def parse_atoms(stack):
+    if(stack):
+        print("stack has items")
 
 
-def parse_atoms(tokenList, index):
+
+def parse_atom(stack):
 
 
-def parse_atom(tokenList, index):
-
-
-def parse_list(tokenList, index):
-    if(tokenList[index]!='('):
-        print("Syntax Error, impossible state")
+def parse_list(stack):
+    if(stack[-1]!='('):
+        print("Syntax Error")
         sys.exit()
     print()
 
 def parse_listBody(tokenList, index):
 
 
-def parse_id(tokenList, index):
+def parse_id(stack):
     #Impossible state, return error
-    if(tokenList[index]=='(' or tokenList[index] ==')'):
-        print("Syntax Error, impossible state")
+    if(stack[-1]=='(' or stack[-1] ==')'):
+        print("Syntax Error")
         sys.exit()
-    print("Token /'{0}/' Production: Atom -> id[{0}]").format(tokenList[index])
-    index = index+1
+    print("Token /'{0}/' Production: Atom -> id[{0}]").format(stack[-1])
 
-def parse_int(tokenList, index):
+
+def parse_int(stack):
     # Check if token is an integer. If not, print error
-    if(tokenList[index].isdigit()):
-        print("Token /'{0}/' Production: Atom -> int[{0}]").format(tokenList[index])
-        index = index+1
+    if(stack[-1].isdigit()):
+        print("Token /'{0}/' Production: Atom -> int[{0}]").format(stack[-1])
         #Because this is a terminal, we don't call a further parse function
     else:
         print("Syntax Error")
         sys.exit()
 
-def parse_eps(tokenList, index):
+def parse_eps(stack):
