@@ -17,15 +17,26 @@ def parse_S(stack):
     print("Token /'{0}/' Production: S -> Atoms").format(stack[-1])
     parse_atoms(stack)
 
-
-
 def parse_atoms(stack):
     if(stack):
-        print("stack has items")
-
-
+        parse_atom(stack)
+        parse_atoms(stack)
 
 def parse_atom(stack):
+    if(stack[-1]=='\''):
+        print("Token /'{0}/' Production: Atom -> ' Atom").format(stack[-1])
+        stack.pop()
+        parse_atom(stack)
+    elif(stack[-1] == "("):
+        print("Token /'{0}/' Production: Atom -> List").format(stack[-1])
+        parse_list(stack)
+    elif(stack[-1]=="+"):
+        print("Token /'{0}/' Production: Atom -> id[{0}]").format(stack[-1])
+        stack.pop()
+    elif(stack[-1].isdigit()):
+        print("Token /'{0}/' Production: Atom -> int[{0}]").format(stack[-1])
+        stack.pop()
+
 
 
 def parse_list(stack):
