@@ -21,20 +21,25 @@ def parse_atoms(stack):
     if(stack):
         parse_atom(stack)
         parse_atoms(stack)
+    else:
+        print("Token /'epsilon/' Production: Atoms -> epsilon")
 
 def parse_atom(stack):
-    if(stack[-1]=='\''):
+    if(stack[-1]==")"):
+        print("Syntax Error")
+        sys.exit()
+    elif(stack[-1]=='\''):
         print("Token /'{0}/' Production: Atom -> ' Atom").format(stack[-1])
         stack.pop()
         parse_atom(stack)
     elif(stack[-1] == "("):
         print("Token /'{0}/' Production: Atom -> List").format(stack[-1])
         parse_list(stack)
-    elif(stack[-1]=="+"):
-        print("Token /'{0}/' Production: Atom -> id[{0}]").format(stack[-1])
-        stack.pop()
     elif(stack[-1].isdigit()):
         print("Token /'{0}/' Production: Atom -> int[{0}]").format(stack[-1])
+        stack.pop()
+    else:
+        print("Token /'{0}/' Production: Atom -> id[{0}]").format(stack[-1])
         stack.pop()
 
 def parse_list(stack):
@@ -45,26 +50,6 @@ def parse_list(stack):
     stack.pop()
     parse_listBody(stack)
 
-def parse_listBody(tokenList, index):
+def parse_listBody(stack):
     print("Token /'{0}/' Production: ListBody -> Atoms").format(stack[-1])
     parse_atoms(stack)
-
-
-def parse_id(stack):
-    #Impossible state, return error
-    if(stack[-1]=='(' or stack[-1] ==')'):
-        print("Syntax Error")
-        sys.exit()
-    print("Token /'{0}/' Production: Atom -> id[{0}]").format(stack[-1])
-
-
-def parse_int(stack):
-    # Check if token is an integer. If not, print error
-    if(stack[-1].isdigit()):
-        print("Token /'{0}/' Production: Atom -> int[{0}]").format(stack[-1])
-        #Because this is a terminal, we don't call a further parse function
-    else:
-        print("Syntax Error")
-        sys.exit()
-
-def parse_eps(stack):
