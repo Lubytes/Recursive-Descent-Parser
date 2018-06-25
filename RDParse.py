@@ -46,6 +46,8 @@ def parse_list(stack):
     parse_listBody(stack)
 
 def parse_listBody(tokenList, index):
+    print("Token /'{0}/' Production: ListBody -> Atoms").format(stack[-1])
+    parse_atoms(stack)
 
 
 def parse_id(stack):
