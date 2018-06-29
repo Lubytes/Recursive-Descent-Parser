@@ -5,7 +5,7 @@ TESTS='0 1 2 3 4 5 6 7 8 9 10 11 12 13 14'
 PROG=runme.sh
 count=0
 
-rm -rf SchemeParser.class
+rm -rf *.class
 if [ ! -f $PROG ]; then
   echo Error: $PROG is not in the current directory 
   exit 1
