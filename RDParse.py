@@ -1,70 +1,69 @@
 # File:     RDParse.py
 # Authors:  Brandon Poole, John Phillips, Aqeb Hamdan
-# Date:     June 21st, 2018
+# Date:     July 4th, 2018
 # Purpose:  A recursive descent parser for a specific grammar
 
 #!/usr/bin/env python
 
 import sys
+from ListTree import Tree
 
 file = sys.argv[1]
 fileContents = open(file, "r")
 tokens = fileContents.read().split()
 tokens.reverse()
+tree = Tree()
 
-#print(tokens)
 
-def parse_S(stack):
+def parse_S(stack, tree):
     if(stack):
         if(stack[-1]==")"):
             print("Syntax Error")
             sys.exit()
         else:
-            print("Token \'{0}\' Production: S -> Atoms".format(stack[-1]))
+            pass
     else:
-        print("Token \'epsilon\' Production: S -> Atoms")
-    parse_atoms(stack)
+        pass
+    parse_atoms(stack, tree)
 
-def parse_atoms(stack):
+def parse_atoms(stack, tree):
     if(not stack):
-        print("Token \'epsilon\' Production: Atoms -> epsilon")
+        pass
     elif(stack[-1]==")"):
         pass
     else:
-        print("Token \'{0}\' Production: Atoms -> Atom Atoms".format(stack[-1]))
-        parse_atom(stack)
-        parse_atoms(stack)
+        parse_atom(stack, tree)
+        parse_atoms(stack, tree)
 
 
-def parse_atom(stack):
+def parse_atom(stack, tree):
     if(stack[-1]==")"):
         print("Syntax Error")
         sys.exit()
     elif(stack[-1]=='\''):
-        print("Token \'{0}\' Production: Atom -> ' Atom".format(stack[-1]))
-        stack.pop()
-        parse_atom(stack)
+        tree.addItem("\'")
+        parse_atom(stack, tree)
     elif(stack[-1] == "("):
-        print("Token \'{0}\' Production: Atom -> List".format(stack[-1]))
-        parse_list(stack)
+        tree.addNewList()
+        parse_list(stack, tree)
     elif(stack[-1].isdigit()):
-        print("Token \'{0}\' Production: Atom -> int[{0}]".format(stack[-1]))
+        tree.addItem(stack[-1])
         stack.pop()
     else:
-        print("Token \'{0}\' Production: Atom -> id[{0}]".format(stack[-1]))
+        tree.addItem(stack[-1])
         stack.pop()
 
-def parse_list(stack):
+def parse_list(stack, tree):
     if(stack[-1]!='('):
         print("Syntax Error")
         sys.exit()
-    print("Token \'{0}\' Production: List -> ( ListBody )".format(stack[-1]))
     stack.pop()
-    parse_listBody(stack)
+    parse_listBody(stack, tree)
+
     #check if close bracket
     if(stack):
         if(stack[-1] == ")"):
-            print("Token \'{0}\' Production: Atoms -> epsilon".format(stack[-1]))
+            tree.finishList()
             stack.pop()
         else:
             print("Syntax Error")
@@ -73,16 +72,17 @@ def parse_list(stack):
         print("Syntax Error")
         sys.exit()
 
-def parse_listBody(stack):
+def parse_listBody(stack, tree):
     if(stack):
-        print("Token \'{0}\' Production: ListBody -> Atoms".format(stack[-1]))
+        pass
     else:
         print("Token \'epsilon\' Production: ListBody -> Atoms")
         print("Token 'epsilon' Production: Atoms -> epsilon")
         print("Syntax Error")
         sys.exit()
-    parse_atoms(stack)
+    parse_atoms(stack, tree)
     #print("Token \'{0}\' Production: Atoms -> epsilon".format(stack[-1]))
 
 
-parse_S(tokens)
+parse_S(tokens, tree)
+print(tree.getHead())
