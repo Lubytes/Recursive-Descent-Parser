@@ -34,10 +34,18 @@ def evalInnerList(tree, iterator):
             tempResult, iterator = evalDiv(tree[iterator+1:], iterator)
         elif (listItem == 'list'):
             tempResult, iterator = evalList(tree[iterator+1:], iterator)
-        elif (listItem == '\''):
+        elif (listItem == 'q'):
             tempResult, iterator = evalQuot(tree[iterator+1:], iterator)
         elif (listItem == 'car'):
-            tempResult, iterator = evalCar(tree[iterator+1:], iterator)
+            tempResult, iterator = evalCar(tree[iterator+2:], iterator)
+            del tree[iterator + 1]
+        elif (listItem == 'cdr'):
+            tempResult, iterator = evalCdr(tree[iterator+2:], iterator)
+            del tree[iterator+1]
+        elif (listItem == 'cons'):
+            tempResult, iterator = evalCons(tree[iterator+3:],tree[iterator+1], iterator)
+            del tree[iterator + 1]
+            del tree[iterator + 1]
 
         result += tempResult
         iterator += 1
@@ -110,10 +118,14 @@ def evalDiv(tree, iterator):
 # eg ( car ' ( a b c ) ) evaluates to 'a'
 def evalCar(tree, iterator):
     if tree:
-        print(tree)
-        statement = evalInnerList(tree)
-        iterator += len(tree)
-        return str(tree[0])+'\n', iterator
+        statement = ''
+        #print(tree)
+        if(tree[0]=='car' or tree[0]=='cdr' or tree[0]=='cons'):
+            tempStatement = evalInnerList(tree, iterator)
+            statement=tempStatement[0]
+        else:
+            statement = tree[0][0]
+        return str(statement)+'\n', iterator
     else:
         print('Error, list out of index')
 
@@ -121,7 +133,19 @@ def evalCar(tree, iterator):
 # eg ( cdr ' ( a b c ) ) evaluates to ( b c )
 def evalCdr(tree, iterator):
     if tree:
-        return str(tree[1:])+'\n'
+        statement = ''
+        x = 0
+        #print(tree)
+        if(tree[0]=='car' or tree[0]=='cdr' or tree[0]=='cons'):
+            tempStatement = evalInnerList(tree, iterator)
+            statement=tempStatement[1:]
+        else:
+            statement = tree[0][1:]
+            if (len(statement)>1):
+                statement, x = evalQuot(statement, iterator)
+            else:
+                statement = str(statement)
+        return str(statement)+'\n', iterator
     else:
         print('Error, list out of index')
 
@@ -140,12 +164,15 @@ def evalList(tree, iterator):
 # prepend atom to list
 # eg ( cons a ' ( b c ) ) evaluates to ( a b c )
 def evalCons(tree, atom, iterator):
-    tree.insert(0, atom)
-    return evalList(tree)
+    for entry in tree:
+        entry.insert(0, atom[0])
+    result, iterator = evalQuot(tree[0], iterator)
+    return str(result)+'\n', iterator
 
 def evalQuot(tree, iterator):
+    statement = ' '.join(tree)
     result = '( '
-    result += tree
+    if(tree):
+        result += str(statement)+" "
     result += ')'
-
     return result, iterator

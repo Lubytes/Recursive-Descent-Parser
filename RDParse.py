@@ -42,7 +42,7 @@ def parse_atom(stack, tree):
         print("Syntax Error")
         sys.exit()
     elif(stack[-1]=='\''):
-        tree.addItem("\'")
+        tree.addItem("q")
         stack.pop()
         parse_atom(stack, tree)
     elif(stack[-1] == "("):
