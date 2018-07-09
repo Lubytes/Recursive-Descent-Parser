@@ -34,6 +34,8 @@ def evalInnerList(tree, iterator):
             tempResult, iterator = evalDiv(tree[iterator+1:], iterator)
         elif (listItem == 'list'):
             tempResult, iterator = evalList(tree[iterator+1:], iterator)
+        elif (listItem == '\''):
+            tempResult, iterator = evalQuot(tree[iterator+1:], iterator)
         elif (listItem == 'car'):
             tempResult, iterator = evalCar(tree[iterator+1:], iterator)
 
@@ -141,5 +143,9 @@ def evalCons(tree, atom, iterator):
     tree.insert(0, atom)
     return evalList(tree)
 
-def evalId(tree, iterator):
-    return 'id'
+def evalQuot(tree, iterator):
+    result = '( '
+    result += tree
+    result += ')'
+
+    return result, iterator

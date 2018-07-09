@@ -43,6 +43,7 @@ def parse_atom(stack, tree):
         sys.exit()
     elif(stack[-1]=='\''):
         tree.addItem("\'")
+        stack.pop()
         parse_atom(stack, tree)
     elif(stack[-1] == "("):
         tree.addNewList()
