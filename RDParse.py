@@ -7,6 +7,7 @@
 
 import sys
 from ListTree import Tree
+from Evaluate import eval
 
 file = sys.argv[1]
 fileContents = open(file, "r")
@@ -85,4 +86,6 @@ def parse_listBody(stack, tree):
 
 
 parse_S(tokens, tree)
-print(tree.getHead())
+#print(tree.getHead())
+
+eval(tree.getHead())
