@@ -4,7 +4,7 @@ import sys, string, tokenize, re
 tokens = iter( sys.stdin.read().split() )
 cur_token = None
 frames = []
-print(tokens)
+validElements = re.compile("(|)|\+|-|\*|/|car|cdr|list|cons|'")
 
 class ParseError(Exception):
   def __init__(self, value):
@@ -109,7 +109,7 @@ def do_letstar(l):
 #Replace values in the list with their frame values
 def replace_eval_vars(l, frames):
   for i in l:
-    if(not re.match(r"(|)|+|-|*\/|car|cdr|list|cons|'",i) or str(i).isdigit()):
+    if(not validElements.match(i) or str(i).isdigit()):
       for j in frames:
         if(i in j):
           l = [w.replace('i',j[i]) for w in l]
