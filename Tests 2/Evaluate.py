@@ -15,7 +15,8 @@ def eval(tree):
                     exit()
         for totalTree in tree:
             result += evalInnerList(totalTree, iterator)
-    print(result)
+    
+    print(result, end="")
 
 def evalInnerList(tree, iterator):
     result = ''

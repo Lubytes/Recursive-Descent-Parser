@@ -89,4 +89,4 @@ def parse_listBody(stack, tree):
 parse_S(tokens, tree)
 #print(tree.getHead())
 
-eval(tree.getHead())
+print(tree.getHead())
