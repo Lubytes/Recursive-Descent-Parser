@@ -1,4 +1,10 @@
-a = "b"
+a = [{}]
+a[0]["a"] = 42
+
+l = ["a"]
 
 for i in a:
-    print(i)
+    if("a" in i):
+        l = [w.replace("a",str(i["a"])) for w in l]
+
+print(l)

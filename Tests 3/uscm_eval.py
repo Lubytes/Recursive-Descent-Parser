@@ -4,7 +4,7 @@ import sys, string, tokenize, re
 tokens = iter( sys.stdin.read().split() )
 cur_token = None
 frames = []
-validElements = re.compile("(|)|\+|-|\*|/|car|cdr|list|cons|'")
+validElements = re.compile(r"(|)|\+|-|\*|/|car|cdr|list|cons|'")
 
 class ParseError(Exception):
   def __init__(self, value):
@@ -74,9 +74,12 @@ def do_define(l):
   if(len(frames) == 0):
     frames.append({})
   var = l[0]
-  result = replace_eval_vars(l[1:],frames)
+  if(l[1] == "'"):
+    result = do_eval(l[2:])
+  else: 
+    result = replace_eval_vars(l[1:],frames)
   frames[0][var] = result
-  print(var)
+  return var
 
 def do_let(l):
   global frames
@@ -109,10 +112,14 @@ def do_letstar(l):
 #Replace values in the list with their frame values
 def replace_eval_vars(l, frames):
   for i in l:
-    if(not validElements.match(i) or str(i).isdigit()):
-      for j in frames:
-        if(i in j):
-          l = [w.replace('i',j[i]) for w in l]
+    if(not str(i).isdigit()): #NEEDS AND IF NOT VALID ID (maybe)
+      for frame in frames:
+        if(i in frame):
+          l = [w.replace(i,str(frame[i])) for w in l]
+
+  if(isinstance( l, list )):
+    if(len(l) == 1):
+      l = l[0]
 
   return do_eval(l)
 
@@ -121,7 +128,7 @@ def do_eval( a ):
     if len( a ) < 1:
       raise EvalError( '( )' )
 
-    op = do_eval( a[0] )
+    op = a[0]
 
     f = a
     a = None
@@ -140,29 +147,31 @@ def do_eval( a ):
     elif op == "car":
       if len( f ) > 1:
         l = do_eval( f[1] )
-        if isinstance( l, list ) and len( l ) > 0:
+        if(isinstance( l, list ) and len( l ) > 0):
           a = l[0]
     elif op == "cdr":
       if len( f ) > 1:
         l = do_eval( f[1] )
-        if isinstance( l, list ) and len( l ) > 0:
+        if(isinstance( l, list ) and len( l ) > 0):
           a = l[1:]
     elif op == "cons":
-      if len( f ) > 2:
+      if(len( f ) > 2):
         h = do_eval( f[1] )
         t = do_eval( f[2] )
-        if isinstance( t, list ):
+        if(isinstance( t, list )):
           a = [ h ] + t
     elif op == "list":
       a = []
       for b in f[1:]:
         a = a + [do_eval( b )]
     elif op == "define":
-      do_define(f[1:])
+      a = do_define(f[1:])
     elif op == "let":
       do_let(f[1:])
+      a = []
     elif op =="let*":
       do_letstar(f[1:])
+      a = []
     else:
       raise EvalError( 'unknown proc: ' + str( op ) ) 
 

@@ -20,11 +20,11 @@ for T in $TESTS; do
     ./$PROG < $PREFIX.$T.in > $PREFIX.$T.out
     if diff -w $PREFIX.$T.out $PREFIX.$T.gold > /dev/null; then
       echo " " PASSED
-      let "count = count + 1"
-      #rm $PREFIX.$T.out 
+      let "count = count + 1" 
     else
       echo " " FAILED
     fi
+    rm $PREFIX.$T.out
   else
     echo Oops: file $PREFIX.$T.in does not exist!
   fi
