@@ -17,7 +17,7 @@ for T in $TESTS; do
   if [ -f $PREFIX.$T.in ]; then  
     echo ===========================================
     echo Test file: $PREFIX.$T.in 
-    ./$PROG $PREFIX.$T.in > $PREFIX.$T.out
+    ./$PROG < $PREFIX.$T.in > $PREFIX.$T.out
     if diff -w $PREFIX.$T.out $PREFIX.$T.gold > /dev/null; then
       echo " " PASSED
       let "count = count + 1"

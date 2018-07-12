@@ -1,10 +1,10 @@
 #!/local/bin/python
 
 import sys, string, tokenize, re
-
 tokens = iter( sys.stdin.read().split() )
 cur_token = None
 frames = []
+print(tokens)
 
 class ParseError(Exception):
   def __init__(self, value):
@@ -23,7 +23,7 @@ def lookahead():
 
   if cur_token == None:
     try:
-      cur_token = tokens.next()
+      cur_token = next(tokens)
     except:
       cur_token = None
 
@@ -257,7 +257,7 @@ def atom2str( l ):
 def eval_result( l ):
   for a in l:
     print(atom2str( do_eval( a ) ))
- 
+
 try:
   l = parseS()
   if lookahead() != None:

@@ -3,4 +3,4 @@
 # javac SchemeEval2.java
 
 # Command to run your program
-python uscm_eval.py "$1"
+python uscm_eval.py
