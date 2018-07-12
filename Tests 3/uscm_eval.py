@@ -257,7 +257,6 @@ def atom2str( l ):
 def eval_result( l ):
   for a in l:
     print(atom2str( do_eval( a ) ))
-    
  
 try:
   l = parseS()
