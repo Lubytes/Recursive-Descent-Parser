@@ -73,18 +73,12 @@ def do_define(l):
   global frames
   if(len(frames) == 0):
     frames.append({})
-  iterator = iter(l)
-  var = next(iterator)
-  
-  for index in iterator:
-    if(isinstance( index, list )):
-      if(index[0] == "'"):
-        result = ["'",do_eval(index)] # NEED TO GET TO PRINT OUT WITH ( )
-    else: 
-      result = replace_eval_vars(index,frames)
-      result = do_eval(result)
+  var = l[0]
+  if(l[1] == "'"):
+    result = do_eval(l[2:])
+  else: 
+    result = replace_eval_vars(l[1:],frames)
   frames[0][var] = result
-  
   return var
 
 def do_let(l):
@@ -127,12 +121,13 @@ def replace_eval_vars(l, frames):
     if(len(l) == 1):
       l = l[0]
 
-  return l
+  return do_eval(l)
 
 def do_eval( a ):
   if isinstance( a, list ): # list  
     if len( a ) < 1:
       raise EvalError( '( )' )
+
     op = a[0]
 
     f = a
