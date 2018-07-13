@@ -24,7 +24,7 @@ for T in $TESTS; do
     else
       echo " " FAILED
     fi
-    rm $PREFIX.$T.out
+    #rm $PREFIX.$T.out
   else
     echo Oops: file $PREFIX.$T.in does not exist!
   fi

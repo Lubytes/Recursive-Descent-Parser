@@ -1,11 +1,10 @@
 #!/local/bin/python
 
 import sys, string, tokenize, re
-
 tokens = iter( sys.stdin.read().split() )
 cur_token = None
 frames = []
-validID = re.compile(r"(|)|\+|-|\*|/|car|cdr|list|cons|'")
+validElements = re.compile(r"(|)|\+|-|\*|/|car|cdr|list|cons|'")
 
 class ParseError(Exception):
   def __init__(self, value):
@@ -39,46 +38,6 @@ def next_token():
   return n
 
 
-
-# ===================
-# Evaluation
-# ===================
-
-# ===================
-# New Methods
-# ===================
-
-# Lookup value from key in frames
-def lookup(a):
-  global frames
-  
-  value = None
-  for frame in frames:
-    if(a in frame):
-      value = frame[a]
-  
-  if(value == None):
-    raise EvalError( "value did not exist in frames: " + str(a) )
-  
-  return value
-
-def do_define(l):
-  global frames
-  if(len(frames) == 0):
-    frames.append({})
-  var = l[0]
-  # do stuff with l[1]
-  result = do_eval(l[1:][0])
-
-  # end
-  frames[0][var] = result
-  return var
-
-# ===================
-# End New Methods
-# ===================
-
-
 def add( a, b ):
   return a + b
 
@@ -109,13 +68,75 @@ def do_arith_op( op, l ):
  
   return r
 
+#Handles the define value
+def do_define(l):
+  global frames
+  if(len(frames) == 0):
+    frames.append({})
+  var = l[0]
+  if(isinstance( l[1], list )):
+    if(l[1][0] == "\'"):
+      result = l[1]
+      print("type: " + str(type(l[1])))
+    else:
+      result = replace_eval_vars(l[1:],frames)
+  else: 
+    result = replace_eval_vars(l[1:],frames)
+  frames[0][var] = result
+  print("type: " + str(type(frames[0][var])))
+  return var
+
+def do_let(l):
+  global frames
+  frames.insert(0,{})
+  # Assign varialbes
+  for i in l[0]:
+    var = i[0]
+    result = replace_eval_vars(i[1:], frames[1:])
+    frames[0][var] = result
+  # Execute Functions
+  if(len(l) > 1):
+    for j in l[1:]:
+      do_eval(j)
+  del frames[0]
+
+def do_letstar(l):
+  global frames
+  frames.insert(0,{})
+  # Assign varialbes
+  for i in l[0]:
+    var = i[0]
+    result = replace_eval_vars(i[1:], frames)
+    frames[0][var] = result
+  # Execute Functions
+  if(len(l) > 1):
+    for j in l[1:]:
+      do_eval(j)
+  del frames[0]
+
+#Replace values in the list with their frame values
+def replace_eval_vars(l, frames):
+  for i in l:
+    if(not str(i).isdigit()): #NEEDS AND IF NOT VALID ID (maybe)
+      for frame in frames:
+        if(i in frame):
+          l = [w.replace(i,str(frame[i])) for w in l]
+
+  if(isinstance( l, list )):
+    if(len(l) == 1):
+      l = l[0]
+
+  return do_eval(l)
 
 def do_eval( a ):
+  print(a)
+  print(type(a))
   if isinstance( a, list ): # list  
     if len( a ) < 1:
       raise EvalError( '( )' )
+    
+    op = a[0]
 
-    op = do_eval(a[0])
     f = a
     a = None
 
@@ -128,23 +149,24 @@ def do_eval( a ):
     elif op == "/":
       a = do_arith_op( div, f[1:] )
     elif op == "'":
+      print("got here")
       if len( f ) > 1:
         a = f[1]
     elif op == "car":
       if len( f ) > 1:
         l = do_eval( f[1] )
-        if isinstance( l, list ) and len( l ) > 0:
+        if(isinstance( l, list ) and len( l ) > 0):
           a = l[0]
     elif op == "cdr":
       if len( f ) > 1:
         l = do_eval( f[1] )
-        if isinstance( l, list ) and len( l ) > 0:
+        if(isinstance( l, list ) and len( l ) > 0):
           a = l[1:]
     elif op == "cons":
-      if len( f ) > 2:
+      if(len( f ) > 2):
         h = do_eval( f[1] )
         t = do_eval( f[2] )
-        if isinstance( t, list ):
+        if(isinstance( t, list )):
           a = [ h ] + t
     elif op == "list":
       a = []
@@ -168,21 +190,9 @@ def do_eval( a ):
   elif str(a).isdigit():   # int
     return a
   else:                    # id
-    if(validID.match(a)):
-      return a
-    else:
-      return lookup(a)
-
-
-
-
-
-# ===================
-# End Evaluation
-# ===================
-
-
-
+    global frames
+    return replace_eval_vars(a, frames)
+    
 
 
 def parseS():
@@ -264,7 +274,7 @@ def atom2str( l ):
 def eval_result( l ):
   for a in l:
     print(atom2str( do_eval( a ) ))
- 
+
 try:
   l = parseS()
   if lookahead() != None:
