@@ -1,12 +1,11 @@
 #!/local/bin/python
 
-import sys, string, tokenize, re
+import sys, string, tokenize
 
 tokens = iter( sys.stdin.read().split() )
 cur_token = None
 frames = []
-#validID = re.compile(r"(|)|\+|-|\*|/|car|cdr|list|cons|'")
-validID = ['(',')','+','-','*','/','car','cdr','list','cons',"'",'define','let','letstar']
+validID = ['(',')','+','-','*','/','car','cdr','list','cons',"'",'define','let','let*']
 
 class ParseError(Exception):
   def __init__(self, value):
@@ -56,12 +55,12 @@ def lookup(a):
   value = None
   for frame in frames:
     if(a in frame):
-      value = frame[a]
+      return frame[a]
+      
   
   if(value == None):
     raise EvalError( "value did not exist in frames: " + str(a) )
   
-  return value
 
 def do_define(l):
   global frames
@@ -76,10 +75,33 @@ def do_define(l):
   return var
 
 def do_let(l):
-  return ""
+  global frames
+  tmpDict = {}
+  for i in l[0]:
+    var = i[0]
+    result = do_eval(i[1:][0])
+    tmpDict[var] = result
+  frames.insert(0,tmpDict)
+  
+  for i in l[1:]:
+    result = do_eval(i)
+  
+  del frames[0]
+  return result
 
 def do_letstar(l):
-  return ""
+  global frames
+  frames.insert(0,{})
+  for i in l[0]:
+    var = i[0]
+    result = do_eval(i[1:][0])
+    frames[0][var] = result
+  
+  for i in l[1:]:
+    result = do_eval(i)
+  
+  del frames[0]
+  return result
 
 # ===================
 # End New Methods
@@ -160,15 +182,13 @@ def do_eval( a ):
     elif op == "define":
       a = do_define(f[1:])
     elif op == "let":
-      do_let(f[1:])
-      a = []
+      a = do_let(f[1:])
     elif op =="let*":
-      do_letstar(f[1:])
-      a = []
+      a = do_letstar(f[1:])
     else:
       raise EvalError( 'unknown proc: ' + str( op ) ) 
-
     if a == None:
+      print("was none")
       raise EvalError( op )
 
     return a
