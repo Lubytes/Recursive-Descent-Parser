@@ -5,7 +5,8 @@ import sys, string, tokenize, re
 tokens = iter( sys.stdin.read().split() )
 cur_token = None
 frames = []
-validID = re.compile(r"(|)|\+|-|\*|/|car|cdr|list|cons|'")
+#validID = re.compile(r"(|)|\+|-|\*|/|car|cdr|list|cons|'")
+validID = ['(',')','+','-','*','/','car','cdr','list','cons',"'",'define','let','letstar']
 
 class ParseError(Exception):
   def __init__(self, value):
@@ -73,6 +74,12 @@ def do_define(l):
   # end
   frames[0][var] = result
   return var
+
+def do_let(l):
+  return ""
+
+def do_letstar(l):
+  return ""
 
 # ===================
 # End New Methods
@@ -168,7 +175,7 @@ def do_eval( a ):
   elif str(a).isdigit():   # int
     return a
   else:                    # id
-    if(validID.match(a)):
+    if(a in validID):
       return a
     else:
       return lookup(a)
