@@ -1,2 +1,2 @@
 #!/bin/sh
-python RDParse.py "$1"
+python RDParse.py

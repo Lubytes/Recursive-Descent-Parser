@@ -1,11 +1,15 @@
 #!/local/bin/python
 
+# File:     uscm_eval.py
+# Authors:  Brandon Poole, John Phillips, Aqeb Hamdan
+# Date:     July 13th, 2018
+# Purpose:  Evaluate scheme parsings with variable definitions 
+
 import sys, string, tokenize
 
 tokens = iter( sys.stdin.read().split() )
 cur_token = None
-frames = []
-validID = ['(',')','+','-','*','/','car','cdr','list','cons',"'",'define','let','let*']
+frames = [{'+': '+', '-': '-', '*': '*','/': '/', 'car': 'car','cdr': 'cdr','list': 'list','cons': 'cons',"'": "'",'define': 'define','let': 'let','let*': 'let*'}]
 
 class ParseError(Exception):
   def __init__(self, value):
@@ -118,7 +122,7 @@ def mul( a, b ):
   return a * b
 
 def div( a, b ):
-  return a / b
+  return a // b
 
 
 def do_arith_op( op, l ):
@@ -195,10 +199,7 @@ def do_eval( a ):
   elif str(a).isdigit():   # int
     return a
   else:                    # id
-    if(a in validID):
-      return a
-    else:
-      return lookup(a)
+    return lookup(a)
 
 
 
