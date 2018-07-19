@@ -130,13 +130,14 @@ def do_set(l):
 def do_lambda(l):
   return Closure(l[0],l[1:])
 
+# TODO: enclose in frame for define (it's cool)
 def do_closure(c,l):
   counter = 0
   #print(c.getParams())
   #print(c.getFunction())
   #print(l)
   for i in c.getParams():
-    do_eval(['let',i,l[counter]])
+    do_eval(['define',i,l[counter]])
     counter += 1
   functions = c.getFunction()
   output = ""
@@ -184,6 +185,7 @@ def do_arith_op( op, l ):
 
 
 def do_eval( a ):
+  #print(a)
   if isinstance( a, list ): # list  
     if len( a ) < 1:
       raise EvalError( '( )' )
