@@ -1,0 +1,20 @@
+['let', [['result', ["'", 'static-deep']]], ['define', 'callee', ['lambda', [], 'result']], ['define', 'caller', ['lambda', ['p'], ['let', [['result', ["'", 'dynamic-shallow']]], ['p']]]], ['let', [['result', ["'", 'dynamic-deep']]], ['caller', 'callee']]]
+let
+["'", 'static-deep']
+'
+['define', 'callee', ['lambda', [], 'result']]
+define
+['lambda', [], 'result']
+lambda
+['define', 'caller', ['lambda', ['p'], ['let', [['result', ["'", 'dynamic-shallow']]], ['p']]]]
+define
+['lambda', ['p'], ['let', [['result', ["'", 'dynamic-shallow']]], ['p']]]
+lambda
+['let', [['result', ["'", 'dynamic-deep']]], ['caller', 'callee']]
+let
+["'", 'dynamic-deep']
+'
+['caller', 'callee']
+caller
+['let', 'p', 'a']
+let

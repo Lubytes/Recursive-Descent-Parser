@@ -1,0 +1,11 @@
+['define', 'x', 13]
+define
+13
+x
+['define', 'f', ['lambda', ['x'], ['set!', 'x', 7], 'x']]
+define
+['lambda', ['x'], ['set!', 'x', 7], 'x']
+lambda
+f
+['f', 42]
+f

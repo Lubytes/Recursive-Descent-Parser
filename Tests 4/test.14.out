@@ -1,0 +1,13 @@
+['define', 'new-counter', ['lambda', [], ['define', 'c', 0], ['define', 'counter', ['lambda', [], ['set!', 'c', ['+', 'c', 1]], 'c']], 'counter']]
+define
+['lambda', [], ['define', 'c', 0], ['define', 'counter', ['lambda', [], ['set!', 'c', ['+', 'c', 1]], 'c']], 'counter']
+lambda
+new-counter
+['define', 'cnta', ['new-counter']]
+define
+['new-counter']
+new-counter
+['define', 'c', 0]
+define
+0
+Evaluation Error while evaluating 'unknown proc: c'

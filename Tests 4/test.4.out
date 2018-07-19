@@ -1,0 +1,9 @@
+['define', 'f', ['lambda', [], 42]]
+define
+['lambda', [], 42]
+lambda
+f
+['f']
+f
+42
+Evaluation Error while evaluating 'unknown proc: 42'
