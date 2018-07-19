@@ -1,0 +1,4 @@
+( define x 13 )
+( define f ( lambda ( x ) 
+         x  ) )
+( f 42 )

@@ -1,0 +1,3 @@
+( define f ( lambda ( x y z ) 
+         ( list y x z ) ) )
+( f 42 13 7 )

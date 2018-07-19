@@ -1,0 +1,3 @@
+( define f ( lambda ( ) 
+         42  ) )
+( f )

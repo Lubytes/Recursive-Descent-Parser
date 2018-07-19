@@ -1,0 +1,6 @@
+( define a 13 )
+( define f ( lambda ( x ) 
+         ( set! a 7 )
+         ( list a x ) ) )
+( f 42 )
+a

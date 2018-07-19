@@ -1,0 +1,13 @@
+( define new-counter
+       ( lambda ( )
+               ( define c 0 )
+               ( define counter ( lambda ( )
+                       ( set! c ( + c 1 ) )
+                       c ) )
+       counter ) )
+( define cnta ( new-counter ) )
+( cnta )
+( cnta )
+( define cntb ( new-counter ) )
+( cntb )
+( cnta )

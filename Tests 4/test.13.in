@@ -1,0 +1,8 @@
+( let ( ( result '  static-deep ) )
+      ( define callee ( lambda ( )
+                      result ) )
+      ( define caller ( lambda ( p )
+                      ( let ( ( result ' dynamic-shallow ) )
+                         ( p ) ) ) )
+      ( let ( ( result ' dynamic-deep ) )
+         ( caller callee ) ) )

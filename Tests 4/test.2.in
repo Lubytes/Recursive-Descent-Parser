@@ -1,0 +1,6 @@
+( define a 42 )
+( let ( ( a 42 ) ) 
+   ( set! a 13 ) 
+   a
+)
+a
