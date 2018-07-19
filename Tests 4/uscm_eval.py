@@ -78,8 +78,7 @@ def lookup(a):
       return frame[a]
       
   
-  if(value == None):
-    raise EvalError( "value did not exist in frames: " + str(a) )
+  return False
   
 
 def do_define(l):
@@ -135,6 +134,7 @@ def do_closure(c,l):
   counter = 0
   #print(c.getParams())
   #print(c.getFunction())
+  #print(l)
   for i in c.getParams():
     do_eval(['let',i,l[counter]])
     counter += 1
@@ -184,7 +184,6 @@ def do_arith_op( op, l ):
 
 
 def do_eval( a ):
-  print(a)
   if isinstance( a, list ): # list  
     if len( a ) < 1:
       raise EvalError( '( )' )
@@ -234,6 +233,9 @@ def do_eval( a ):
       a = do_set(f[1:])
     elif op == "lambda":
       a = do_lambda(f[1:])
+    elif(isinstance(lookup(f[0]),Closure)):
+      #print("f is: " + str(f))
+      a = do_closure(lookup(f[0]),f[1:])
     else:
       raise EvalError( 'unknown proc: ' + str( op ) ) 
     if a == None:
@@ -245,7 +247,9 @@ def do_eval( a ):
   else:                    # id
     tmp = lookup(a)
     if(isinstance(tmp,Closure)):
-      return do_closure(tmp,a[1:])
+      #print("a is: " + str(a))
+      #return do_closure(tmp,a[1:])
+      return None
     else:
       return tmp
 
