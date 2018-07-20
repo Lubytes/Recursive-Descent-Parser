@@ -132,19 +132,27 @@ def do_lambda(l):
 
 # TODO: enclose in frame for define (it's cool)
 def do_closure(c,l):
+  global frames
+  # print("In closure method")
+  # print(c)
+  # print(l)
+  # New frame
+  frames.insert(0,{})
   counter = 0
-  #print(c.getParams())
-  #print(c.getFunction())
-  #print(l)
+  # Set up scope
   for i in c.getParams():
     do_eval(['define',i,l[counter]])
     counter += 1
-  functions = c.getFunction()
-  output = ""
-  for i in functions:
-    output += str(do_eval(i))
-    
-  return output
+  
+  # Execute each part of closure
+  for i in c.getFunction():
+    result = do_eval(i)
+
+
+  del frames[0]
+
+  return result
+
     
   
 
@@ -235,15 +243,16 @@ def do_eval( a ):
       a = do_set(f[1:])
     elif op == "lambda":
       a = do_lambda(f[1:])
-    elif(isinstance(lookup(f[0]),Closure)):
-      #print("f is: " + str(f))
+    elif(isinstance(op,Closure)):
+      # print("found a closure")
+      # print(f)
       a = do_closure(lookup(f[0]),f[1:])
     else:
       raise EvalError( 'unknown proc: ' + str( op ) ) 
     if a == None:
       raise EvalError( op )
-
     return a
+
   elif str(a).isdigit():   # int
     return a
   else:                    # id
