@@ -15,16 +15,21 @@ frames = [{'+': '+', '-': '-', '*': '*','/': '/', 'car': 'car','cdr': 'cdr','lis
 class Closure:
   params = []
   function = []
+  frameLength = None
 
-  def __init__(self, params, function):
+  def __init__(self, params, function, frameLength):
     self.params = params
     self.function = function
+    self.frameLength = frameLength
 
   def getParams(self):
     return self.params
 
   def getFunction(self):
     return self.function
+
+  def getFrameLength(self):
+    return self.frameLength
 
 
 class ParseError(Exception):
@@ -121,35 +126,46 @@ def do_letstar(l):
   return result
 
 def do_set(l):
-  tmp = lookup(l[0])
-  do_define(l)
+  global frames
+  
+  for frame in frames:
+    if(l[0] in frame):
+      tmp = frame[l[0]]
+      frame[l[0]] = l[1]
+      break
+
   return tmp
 
 # l[0] list of parameters
 # l[l:] list of functions
 def do_lambda(l):
-  return Closure(l[0],l[1:])
+  global frames
+  return Closure(l[0],l[1:],len(frames))
 
 # TODO: enclose in frame for define (it's cool)
 def do_closure(c,l):
   global frames
-  # print("In closure method")
-  # print(c)
-  # print(l)
+
+  # Set up scope
+  tmp = []
+  while(c.getFrameLength() != len(frames)):
+    tmp.append(frames[0])
+    del frames[0]
+
   # New frame
   frames.insert(0,{})
   counter = 0
-  # Set up scope
   for i in c.getParams():
     do_eval(['define',i,l[counter]])
     counter += 1
-  
+
   # Execute each part of closure
   for i in c.getFunction():
     result = do_eval(i)
 
-
   del frames[0]
+  for i in tmp:
+    frames.insert(0,i)
 
   return result
 
