@@ -247,13 +247,9 @@ def do_eval( a ):
   elif str(a).isdigit():   # int
     return a
   else:                    # id
-    tmp = lookup(a)
-    if(isinstance(tmp,Closure)):
-      #print("a is: " + str(a))
-      #return do_closure(tmp,a[1:])
-      return None
-    else:
-      return tmp
+    return lookup(a)
+
+
 
 
 
