@@ -1,7 +1,0 @@
-['define', 'f', ['lambda', ['x'], 'x']]
-define
-['lambda', ['x'], 'x']
-lambda
-f
-['f', 42]
-f

@@ -1,0 +1,11 @@
+( define leapyear? ( lambda ( n )
+    ( cond
+        ( ( not ( = n ( * 4 ( / n 4 ) ) ) ) ' common_year )
+        ( ( not ( = n ( * 100 ( / n 100 ) ) ) ) ' leap_year )
+        ( ( = n ( * 400 ( / n 400 ) ) ) ' leap_year )
+        ( #t ' common_year ) ) ) )
+
+( leapyear? 2014 )
+( leapyear? 2012 )
+( leapyear? 2000 )
+( leapyear? 200 )

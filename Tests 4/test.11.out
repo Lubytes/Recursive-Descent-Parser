@@ -1,7 +1,0 @@
-['define', 'f', ['lambda', ['x', 'y', 'z'], ['list', 'y', 'x', 'z']]]
-define
-['lambda', ['x', 'y', 'z'], ['list', 'y', 'x', 'z']]
-lambda
-f
-['f', 42, 13, 7]
-f

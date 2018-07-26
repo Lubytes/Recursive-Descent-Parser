@@ -15,21 +15,16 @@ frames = [{'+': '+', '-': '-', '*': '*','/': '/', 'car': 'car','cdr': 'cdr','lis
 class Closure:
   params = []
   function = []
-  frameLength = None
 
-  def __init__(self, params, function, frameLength):
+  def __init__(self, params, function):
     self.params = params
     self.function = function
-    self.frameLength = frameLength
 
   def getParams(self):
     return self.params
 
   def getFunction(self):
     return self.function
-
-  def getFrameLength(self):
-    return self.frameLength
 
 
 class ParseError(Exception):
@@ -126,60 +121,30 @@ def do_letstar(l):
   return result
 
 def do_set(l):
-  global frames
-  
-  for frame in frames:
-    if(l[0] in frame):
-      tmp = frame[l[0]]
-      frame[l[0]] = l[1]
-      break
-
+  tmp = lookup(l[0])
+  do_define(l)
   return tmp
 
 # l[0] list of parameters
 # l[l:] list of functions
 def do_lambda(l):
-  global frames
-  return Closure(l[0],l[1:],len(frames))
+  return Closure(l[0],l[1:])
 
+# TODO: enclose in frame for define (it's cool)
 def do_closure(c,l):
-  global frames
-
-  # Set up scope
-  tmp = []
-  while(c.getFrameLength() != len(frames)):
-    tmp.append(frames[0])
-    del frames[0]
-
-  # New frame
-  frames.insert(0,{})
   counter = 0
+  #print(c.getParams())
+  #print(c.getFunction())
+  #print(l)
   for i in c.getParams():
     do_eval(['define',i,l[counter]])
     counter += 1
-
-  # Execute each part of closure
-  for i in c.getFunction():
-    #print(i)
-    # if(isinstance( i, list )):
-    #   #print(i)
-    #   if(isinstance( lookup(i[0]), Closure )):
-    #     #print("here")
-    #     holdLength = lookup(i[0]).getFrameLength()
-    #     lookup(i[0]).setFrameLength(len(frames))
-    #     result = do_eval(i)
-    #     lookup(i[0]).setFrameLength(holdLength)
-    #   else:
-    #     result = do_eval(i)
-    # else:
-    result = do_eval(i)
-
-  del frames[0]
-  for i in tmp:
-    frames.insert(0,i)
-
-  return result
-
+  functions = c.getFunction()
+  output = ""
+  for i in functions:
+    output += str(do_eval(i))
+    
+  return output
     
   
 
@@ -270,22 +235,25 @@ def do_eval( a ):
       a = do_set(f[1:])
     elif op == "lambda":
       a = do_lambda(f[1:])
-    elif(isinstance(op,Closure)):
-      # print("found a closure")
-      # print(f)
+    elif(isinstance(lookup(f[0]),Closure)):
+      #print("f is: " + str(f))
       a = do_closure(lookup(f[0]),f[1:])
     else:
       raise EvalError( 'unknown proc: ' + str( op ) ) 
     if a == None:
       raise EvalError( op )
-    return a
 
+    return a
   elif str(a).isdigit():   # int
     return a
   else:                    # id
-    return lookup(a)
-
-
+    tmp = lookup(a)
+    if(isinstance(tmp,Closure)):
+      #print("a is: " + str(a))
+      #return do_closure(tmp,a[1:])
+      return None
+    else:
+      return tmp
 
 
 

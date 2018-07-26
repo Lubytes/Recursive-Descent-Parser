@@ -1,0 +1,4 @@
+( and #t #t #t )
+( and #t #t #f )
+( and #t #f #t )
+( and #f #t #t )

@@ -1,0 +1,8 @@
+( define countdown ( lambda ( x ) 
+                     ( cond 
+                        ( ( = 0 x ) ( list x ) )
+                        ( #t ( cons x ( countdown ( - x 1 ) ) ) ) ) ) )
+
+( countdown 0 )
+( countdown 10 )
+( countdown 20 )

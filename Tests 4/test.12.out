@@ -1,14 +1,5 @@
-['define', 'area', ['lambda', ['h', 'w'], ['*', 'h', 'w']]]
-define
-['lambda', ['h', 'w'], ['*', 'h', 'w']]
-lambda
 area
-['define', 'square', ['lambda', ['w'], ['area', 'w', 'w']]]
-define
-['lambda', ['w'], ['area', 'w', 'w']]
-lambda
 square
-['area', 51, 42]
-area
-['let', 'h', 'r']
-let
+2142
+0
+Evaluation Error while evaluating 'unknown proc: False'
