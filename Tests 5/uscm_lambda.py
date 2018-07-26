@@ -213,17 +213,21 @@ def do_eval( ref, a ):
       if len( f ) > 2 and isinstance( f[1], list ):
         a = Lambda( ref, f[1], f[2:] )
     elif op == "<":
-      if(do_eval(ref,f[1]) < do_eval(ref,f[2])):
+      if(int(do_eval(ref,f[1])) < int(do_eval(ref,f[2]))):
         a = "#t"
       else:
         a = "#f"
     elif op == ">":
-      if(do_eval(ref,f[1]) > do_eval(ref,f[2])):
+      #print(do_eval(ref,f[1]))
+      #print(do_eval(ref,f[2]))
+      #print(type(do_eval(ref,f[2])))
+      #print(str(do_eval(ref,f[2])).isdigit())
+      if(int(do_eval(ref,f[1])) > int(do_eval(ref,f[2]))):
         a = "#t"
       else:
         a = "#f"
     elif op == "=":
-      if(do_eval(ref,f[1]) == do_eval(ref,f[2])):
+      if(int(do_eval(ref,f[1])) == int(do_eval(ref,f[2]))):
         a = "#t"
       else:
         a = "#f"

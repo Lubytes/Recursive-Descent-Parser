@@ -1,0 +1,8 @@
+( define positive ( lambda ( x ) 
+    ( cond  ( ( equal? ' ( ) x ) ' ( ) )
+            ( ( > 0 ( car x ) ) ( positive ( cdr x ) ) )
+            ( #t ( cons ( car x ) ( positive ( cdr x ) ) ) )
+    )
+) )
+
+( positive ' ( 1 2 -2 3 4 -5 5 6 ) )
