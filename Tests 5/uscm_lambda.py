@@ -1,7 +1,8 @@
 #!/user/bin/python
 
 # File:     uscm_eval.py
-# Authors:  Brandon Poole, John Phillips, Aqeb Hamdan, Dr. Alex Brodsky
+# Authors:  Brandon Poole, John Phillips, Aqeb Hamdan
+# Base:     Dr. Alex Brodsky
 # Date:     July 13th, 2018
 # Purpose:  Evaluate scheme parsings with variable definitions 
 
@@ -22,7 +23,17 @@ top_ref = [None, { '+' : '+',
                    'let*' : 'let*',
                    'define' : 'define',
                    'set!' : 'set!',
-                   'lambda' : 'lambda'
+                   'lambda' : 'lambda',
+                   '#t' : '#t',
+                   '#f' : '#f',
+                   '<' : '<',
+                   '>' : '>',
+                   '=' : '=',
+                   'equal?' : 'equal?',
+                   'not' : 'not',
+                   'or' : 'or',
+                   'and' : 'and',
+                   'cond' : 'cond'
                   }]
 
 
@@ -201,6 +212,58 @@ def do_eval( ref, a ):
     elif op == "lambda":
       if len( f ) > 2 and isinstance( f[1], list ):
         a = Lambda( ref, f[1], f[2:] )
+    elif op == "<":
+      if(f[1] < f[2]):
+        a = "#t"
+      else:
+        a = "#f"
+    elif op == ">":
+      if(f[1] > f[2]):
+        a = "#t"
+      else:
+        a = "#f"
+    elif op == "=":
+      if(f[1] == f[2]):
+        a = "#t"
+      else:
+        a = "#f"
+    elif op == "not":
+      if(do_eval(ref, f[1]) == "#f"):
+        a = "#t"
+      else:
+        a = "#f"
+    elif op == "and":
+      a = "#t"
+      for i in f[1:]:
+        if(do_eval(ref, i) == "#f"):
+          a = "#f"
+          break
+    elif op == "or":
+      a = "#f"
+      for i in f[1:]:
+        if(do_eval(ref, i) == "#t"):
+          a = "#t"
+          break
+    elif op == "equal?":
+      eval1 = None
+      eval2 = None
+      if(f[1] == "\'"):
+        eval1 = do_eval(ref,[f[1],f[2]])
+        if(f[3] == "\'"):
+          eval2 = do_eval(ref,[f[3],f[4]])
+        else:
+          eval2 = do_eval(ref,f[3])
+      else:
+        eval1 = do_eval(ref,f[1])
+        if(f[2] == "\'"):
+          eval2 = do_eval(ref,[f[2],f[3]])
+        else:
+          eval2 = do_eval(ref,f[2])
+      if(eval1 == eval2):
+        a = "#t"
+      else:
+        a = "#f"
+
     else:
       raise EvalError( 'unknown proc: ' + str( op ) )
 
