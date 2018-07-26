@@ -213,17 +213,17 @@ def do_eval( ref, a ):
       if len( f ) > 2 and isinstance( f[1], list ):
         a = Lambda( ref, f[1], f[2:] )
     elif op == "<":
-      if(f[1] < f[2]):
+      if(do_eval(ref,f[1]) < do_eval(ref,f[2])):
         a = "#t"
       else:
         a = "#f"
     elif op == ">":
-      if(f[1] > f[2]):
+      if(do_eval(ref,f[1]) > do_eval(ref,f[2])):
         a = "#t"
       else:
         a = "#f"
     elif op == "=":
-      if(f[1] == f[2]):
+      if(do_eval(ref,f[1]) == do_eval(ref,f[2])):
         a = "#t"
       else:
         a = "#f"
@@ -263,7 +263,11 @@ def do_eval( ref, a ):
         a = "#t"
       else:
         a = "#f"
-
+    elif op == "cond":
+      for i in f[1:]:
+        if(do_eval(ref,i[0]) == "#t"):
+          a = do_eval(ref,i[1])
+          break
     else:
       raise EvalError( 'unknown proc: ' + str( op ) )
 
