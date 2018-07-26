@@ -85,7 +85,7 @@ def mul( a, b ):
   return a * b
 
 def div( a, b ):
-  return a / b
+  return a // b
 
 
 def do_arith_op( ref, op, l ):
@@ -319,7 +319,7 @@ try:
     raise ParseError( 'S' )
   eval_result( top_ref, l )
 except ParseError as p:
-  print "Syntax Error while parsing " + str( p ) + " production"
+  print("Syntax Error while parsing " + str( p ) + " production")
 except EvalError as p:
-  print "Evaluation Error while evaluating " + str( p )
+  print("Evaluation Error while evaluating " + str( p ))
 
